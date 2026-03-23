@@ -3,12 +3,11 @@
   <head>
     <title>自然保護・水脈マップ</title>
     <style>
-      /* 地図を画面いっぱいに表示するための設定 */
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #1a1a1a; /* 読み込み時の背景もダークに */
+        background-color: #212121;
       }
       #map {
         height: 100%;
@@ -19,83 +18,33 @@
     <div id="map"></div>
 
     <script>
-      // 地図を初期化する関数
       function initMap() {
-        // 先ほど作っていただいたダークテーマのJSONデータをここにセット
+        // レガシー形式に変換したダーク＆水脈強調スタイル
         const darkWaterStyle = [
-          { "id": "natural.base", "geometry": { "fillColor": "#212121" } },
-          { "id": "natural.land", "geometry": { "fillColor": "#282828" } },
-          { "id": "natural.land.landCover", "geometry": { "fillColor": "#2e2e2e" } },
-          { "id": "natural.land.landCover.crops", "geometry": { "fillColor": "#333333" } },
-          { "id": "natural.land.landCover.dryCrops", "geometry": { "fillColor": "#353535" } },
-          { "id": "natural.land.landCover.forest", "geometry": { "fillColor": "#223322" } },
-          { "id": "natural.land.landCover.ice", "geometry": { "fillColor": "#cccccc" } },
-          { "id": "natural.land.landCover.sand", "geometry": { "fillColor": "#303030" } },
-          { "id": "natural.land.landCover.shrub", "geometry": { "fillColor": "#2f3f2f" } },
-          { "id": "natural.land.landCover.tundra", "geometry": { "fillColor": "#3a3a3a" } },
-          { "id": "natural.water", "geometry": { "fillColor": { "z00": "#66dcf7", "z08": "#66dcf7", "z16": "#00aaff" } }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "natural.water.lake", "label": { "visible": true, "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "natural.water.ocean", "label": { "visible": true, "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "natural.water.other", "label": { "visible": { "z00": false, "z13": true }, "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "natural.water.river", "label": { "visible": true, "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.park", "geometry": { "fillColor": "#223322" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.natureReserve", "geometry": { "fillColor": "#1a2a1a" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.zoo", "geometry": { "fillColor": "#2a3a2a" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.golfCourse", "geometry": { "fillColor": "#2a3a2a" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.sportsComplex", "geometry": { "fillColor": "#2a3a2a" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.recreation.sportsField", "geometry": { "fillColor": "#2a3a2a" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "pointOfInterest.other.cemetery", "geometry": { "fillColor": "#2a3a2a" } },
-          { "id": "political.reservation", "geometry": { "fillColor": "#2d3d2d", "strokeColor": "#253525" }, "label": { "textFillColor": "#ffffff", "textStrokeColor": "#333333" } },
-          { "id": "infrastructure.urbanArea", "geometry": { "fillColor": { "z00": "#212121", "z12": "#212121", "z14": "#1f1f1f", "z15": "#1f1f1f", "z17": "#222222" } } },
-          { "id": "infrastructure.businessCorridor", "geometry": { "visible": false } },
-          { "id": "infrastructure.building", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.building.commercial", "geometry": { "visible": false } },
-          { "id": "infrastructure.railwayTrack", "geometry": { "visible": false } },
-          { "id": "infrastructure.roadNetwork", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.noTraffic", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.noTraffic.pedestrianMall", "geometry": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.noTraffic.trail", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.noTraffic.trail.paved", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.noTraffic.trail.unpaved", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.parkingAisle", "geometry": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.ramp", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.road", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.road.arterial", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.road.highway", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.road.local", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.road.noOutlet", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadDetail", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadDetail.crosswalk", "geometry": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadDetail.sidewalk", "geometry": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadDetail.surface", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadShield", "label": { "visible": false } },
-          { "id": "infrastructure.roadNetwork.roadSign", "label": { "visible": false } },
-          { "id": "pointOfInterest", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "pointOfInterest.emergency", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "pointOfInterest.emergency.hospital", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "pointOfInterest.foodAndDrink", "label": { "visible": false } },
-          { "id": "pointOfInterest.lodging", "label": { "visible": false } },
-          { "id": "pointOfInterest.retail", "label": { "visible": false } },
-          { "id": "pointOfInterest.service", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "pointOfInterest.transit", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "pointOfInterest.transit.airport", "geometry": { "visible": false }, "label": { "visible": false } },
-          { "id": "political.border", "geometry": { "color": "#404040" } },
-          { "id": "political.city", "label": { "textFillColor": "#ffffff", "textStrokeColor": "#1a1a1a" } },
-          { "id": "political.countryOrRegion", "label": { "textFillColor": "#ffffff", "textStrokeColor": "#1a1a1a" } },
-          { "id": "political.stateOrProvince", "label": { "textFillColor": "#ffffff", "textStrokeColor": "#1a1a1a" } },
-          { "id": "political.neighborhood", "label": { "visible": false } },
-          { "id": "political.sublocality", "label": { "visible": false } }
+          // 全体の背景をダークグレーに
+          { "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
+          // アイコンを非表示
+          { "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] },
+          // 地名を白く光らせて読みやすく
+          { "elementType": "labels.text.fill", "stylers": [{ "color": "#ffffff" }] },
+          { "elementType": "labels.text.stroke", "stylers": [{ "color": "#000000" }] },
+          // 道路、建物、商業施設（POI）、路線をすべて非表示
+          { "featureType": "poi", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "road", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "transit", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "administrative", "elementType": "geometry", "stylers": [{ "visibility": "off" }] },
+          // 水域（川・湖・海）を鮮やかなシアンブルーに
+          { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#00aaff" }] },
+          { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#ffffff" }] }
         ];
 
-        // 地図の表示オプション（中心地、ズームレベル、スタイル）
         const mapOptions = {
-          center: { lat: 35.6895, lng: 139.6917 }, // 初期位置：関東周辺
-          zoom: 11,
+          center: { lat: 35.5824, lng: 139.6226 }, // 初期位置：川崎市中原区周辺
+          zoom: 12,
           styles: darkWaterStyle,
-          disableDefaultUI: true // 余計なボタンを消してスッキリさせる
+          disableDefaultUI: true // 余計なUIを消してスッキリさせる
         };
 
-        // 地図を描画
         const map = new google.maps.Map(document.getElementById("map"), mapOptions);
       }
     </script>
