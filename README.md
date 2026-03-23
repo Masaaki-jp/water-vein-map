@@ -26,6 +26,9 @@
 
    # Nature Conservation & Water Vein Map
 
+<a id="english"></a>
+## 英語 (English)
+
 A custom Google Map web application focused on visualizing water flows, rivers, lakes, and oceans. Designed with a high-contrast dark theme, this map hides artificial structures (roads, buildings, POIs) to emphasize natural topography and water veins.
 
 This project is built as a highly lightweight static web app, ensuring smooth operation even on low-spec PCs and Chromebooks.
