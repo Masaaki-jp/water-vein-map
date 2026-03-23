@@ -2,7 +2,8 @@
 
 [![Deploy to GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-blue?logo=github)](https://masaaki-jp.github.io/water-vein-map/)
 
-**English** | [日本語](#日本語-japanese)
+<a id="english"></a>
+[English](#english) | [日本語](#日本語-japanese)
 
 A custom Google Map web application focused on visualizing water flows, rivers, lakes, and oceans. Designed with a high-contrast dark theme, this map hides artificial structures (roads, buildings, POIs) to emphasize natural topography and water veins. 
 
